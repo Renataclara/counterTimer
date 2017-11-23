@@ -12,11 +12,20 @@ class App extends Component {
     this.handleStop = this.handleStop.bind(this);
   }
 
+  // this.setState({ count: this.state.count + 1 }), 100)
   counterInterval () {
     if (this.state.started === null) {
-      this.setState({ started: setInterval(() => this.setState({ count: this.state.count + 1 }), 100)})
+      this.setState({ started: setInterval(() =>
+        this.setState(prevState => {
+           return {count: prevState.count + 1}
+        }), 100)
+      })
     }
   }
+
+//   this.setState((prevState, props) => ({
+//     counter: prevState.counter + 1
+// }));
 
   handleStop () {
     clearInterval(this.state.started)
