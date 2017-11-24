@@ -5,41 +5,43 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      count: 0,
-      started: null
+      count: 0
     }
     this.counterInterval = this.counterInterval.bind(this);
     this.handleStop = this.handleStop.bind(this);
   }
 
-  // this.setState({ count: this.state.count + 1 }), 100)
   counterInterval () {
-    if (this.state.started === null) {
-      this.setState({ started: setInterval(() =>
+    if (this.interval == null) {
+      this.interval = setInterval(() =>
         this.setState(prevState => {
            return {count: prevState.count + 1}
         }), 100)
-      })
     }
   }
 
-//   this.setState((prevState, props) => ({
-//     counter: prevState.counter + 1
-// }));
-
   handleStop () {
-    clearInterval(this.state.started)
-    this.setState({started: null})
+    clearInterval(this.interval)
+    this.interval = null
   }
 
   render() {
     return (
       <div className="App">
         <h1 className="App-title">{this.state.count}</h1>
-        <button className="button" onClick={this.counterInterval} >Start</button>
-        <button className="button" onClick={this.handleStop}>Stop</button>
       </div>
     );
+  }
+
+  componentDidMount() {
+    document.getElementById("startButton").addEventListener("click", this.counterInterval);
+    document.getElementById("stopButton").addEventListener("click", this.handleStop);
+  }
+
+  componentWillUnmount() {
+    document.getElementById("startButton").removeEventListener("click", this.counterInterval);
+    document.getElementById("stopButton").removeEventListener("click", this.handleStop);
+    clearInterval(this.interval);
   }
 }
 
